@@ -11,6 +11,91 @@ DemoAxiom/
 └── app/      ← consumer: Compose + Koin + Coil, 3 màn hình
 ```
 
+## Import Axiom vào project mới (JitPack)
+
+Axiom phát hành public trên [JitPack](https://jitpack.io/#kaitopunch/Axiom) dưới toạ độ
+**`com.github.kaitopunch:Axiom:<tag>`** — không cần token, không cần clone repo này. Ba bước:
+
+**1. Thêm repo JitPack** — `settings.gradle.kts` (giới hạn cho group của Axiom để các dependency khác
+vẫn chỉ hỏi Google/Maven Central):
+
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+            content { includeGroup("com.github.kaitopunch") }
+        }
+    }
+}
+```
+
+<details>
+<summary>Groovy (<code>settings.gradle</code>)</summary>
+
+```groovy
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'https://jitpack.io'
+            content { includeGroup 'com.github.kaitopunch' }
+        }
+    }
+}
+```
+</details>
+
+**2. Khai báo dependency** — `build.gradle.kts` của module dùng SDK (thường là `:app` hoặc `:data`):
+
+```kotlin
+dependencies {
+    implementation("com.github.kaitopunch:Axiom:1.0.0")
+}
+```
+
+Retrofit, OkHttp, Gson, WorkManager, coroutines, `paging-common`, `koin-core` đi kèm dưới dạng `api`
+— **không** khai lại. Chỉ tự thêm `paging-compose`/`paging-runtime` và `koin-android` nếu màn hình
+dùng (như `app/` ở đây).
+
+**3. Khởi tạo trong `Application.onCreate`**, trước `startKoin`:
+
+```kotlin
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Axiom.init(this) {
+            isDebug = BuildConfig.DEBUG
+            client("api") { baseUrl = BuildConfig.BASE_URL }
+            tasks(products, users)          // TaskSpec — xem axiom/README.md §2
+        }
+        startKoin { modules(axiomModule, appModule) }   // nếu dùng Koin
+        Axiom.get().syncAll()
+    }
+}
+```
+
+Viết Retrofit interface, Record và `task<T>()` theo 5 bước ở [axiom/README.md §2](axiom/README.md#2-bắt-đầu-nhanh--5-bước);
+`app/` trong repo này là một consumer hoàn chỉnh để đối chiếu.
+
+Cần biết:
+
+- **Yêu cầu:** `minSdk ≥ 28`, Kotlin 2.x, JVM 17. AAR build với AGP 8.9.1 / Kotlin 2.1.10 / compileSdk 36.
+- **Version = tên tag** trên GitHub (`1.0.0`, không có `v`). Tag có sẵn và log build tại
+  [jitpack.io/#kaitopunch/Axiom](https://jitpack.io/#kaitopunch/Axiom); lần đầu một version được
+  resolve, JitPack build mất ~2 phút — Gradle sẽ chờ. Thử một commit chưa tag: dùng SHA làm version
+  (`com.github.kaitopunch:Axiom:44bde71ff5`).
+- **R8:** Axiom keep class của nó (consumer rules trong AAR). Record class của **bạn** phải tự keep vì
+  Gson đọc bằng reflection: `-keep class com.example.data.record.** { *; }` (xem `app/proguard-rules.pro`).
+- Sources jar có trên JitPack (`Axiom-1.0.0-sources.jar`); Android Studio tải qua *Download Sources*.
+
+Kiểm chứng: chính `app/` này build được với artifact JitPack thay cho module nguồn —
+`./gradlew :app:installDebug -PAXIOM_SOURCE=jitpack` (xem [cuối trang](#chuyển-sang-artifact-đã-publish)).
+
 ## Chạy
 
 ```bash
@@ -68,6 +153,19 @@ URL, probe 404 không transient).
 
 ## Chuyển sang artifact đã publish
 
-Bỏ `include(":axiom")` trong `settings.gradle.kts`, thêm repo `https://jitpack.io`, và thay
-`implementation(project(":axiom"))` bằng `implementation("com.github.kaitopunch:Axiom:1.0.0")` —
-chi tiết [axiom/README.md §1](axiom/README.md#1-cài-đặt). Code app không đổi dòng nào.
+`app/` lấy SDK từ đâu do `AXIOM_SOURCE` trong `gradle.properties` quyết định (`app/build.gradle.kts`):
+
+| `AXIOM_SOURCE` | `:app` phụ thuộc vào | Dùng khi |
+|---|---|---|
+| `project` (mặc định) | `project(":axiom")` — module nguồn | Sửa SDK và chạy ngay |
+| `jitpack` | `com.github.kaitopunch:Axiom:<AXIOM_VERSION>` từ jitpack.io | Kiểm chứng đúng artifact mà consumer ngoài nhận được |
+
+```bash
+./gradlew :app:installDebug -PAXIOM_SOURCE=jitpack          # một lần
+./gradlew :app:dependencies --configuration debugRuntimeClasspath -PAXIOM_SOURCE=jitpack | grep Axiom
+```
+
+Hoặc đổi hẳn `AXIOM_SOURCE=jitpack` trong `gradle.properties`. Module `:axiom` vẫn được `include`
+trong cả hai chế độ vì JitPack build release từ nó; code app không đổi dòng nào. Version resolve là
+`AXIOM_VERSION` — sau khi bump mà chưa tag, chế độ `jitpack` sẽ fail (đúng: version đó chưa tồn tại);
+thử commit chưa tag bằng `-PAXIOM_VERSION=<sha>`.

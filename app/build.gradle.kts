@@ -56,7 +56,18 @@ android {
 dependencies {
     // The SDK. Retrofit, OkHttp, Gson, WorkManager, coroutines, paging-common and koin-core come with
     // it as `api` dependencies — they are not declared again here (axiom/README.md §1).
-    implementation(project(":axiom"))
+    //
+    // AXIOM_SOURCE (gradle.properties, or -PAXIOM_SOURCE=… on the command line) picks where it comes
+    // from: `project` is the source module under axiom/, `jitpack` is the published artifact — the
+    // same coordinate an external consumer writes, resolved from https://jitpack.io (settings.gradle.kts).
+    when (val axiomSource = providers.gradleProperty("AXIOM_SOURCE").getOrElse("project")) {
+        "project" -> implementation(project(":axiom"))
+        "jitpack" -> {
+            val (owner, repo) = providers.gradleProperty("AXIOM_GITHUB_REPO").get().split("/")
+            implementation("com.github.$owner:$repo:${providers.gradleProperty("AXIOM_VERSION").get()}")
+        }
+        else -> error("AXIOM_SOURCE must be 'project' or 'jitpack', got '$axiomSource'")
+    }
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

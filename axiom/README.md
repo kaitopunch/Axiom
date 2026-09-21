@@ -48,6 +48,9 @@ include(":axiom")
 implementation(project(":axiom"))
 ```
 
+(`app/` ở đây chọn giữa module nguồn và artifact JitPack bằng `AXIOM_SOURCE` — README gốc, phần
+"Chuyển sang artifact đã publish".)
+
 **Từ JitPack (project khác) — public, không cần token:**
 
 ```kotlin
