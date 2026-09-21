@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- WorkManager is initialised by the host application (default initializer or its own
+         Configuration.Provider); Axiom's worker has a plain (Context, WorkerParameters) constructor
+         precisely so it works under whichever WorkerFactory the host chose. -->
+</manifest>
