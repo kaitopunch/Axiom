@@ -26,6 +26,6 @@ include(":app")
 // Axiom — the "call API → Room SSOT → WorkManager" SDK this app demonstrates. Included as a source
 // module (a verbatim copy of the SDK's `axiom/` folder) so the demo is self-contained. A consumer that
 // takes the published artifact instead drops this line and writes
-// `implementation("com.github.kaitopunch.Axiom:axiom:<v>")` against the JitPack repository — see
+// `implementation("com.github.kaitopunch:Axiom:<v>")` against the JitPack repository — see
 // axiom/README.md §1.
 include(":axiom")

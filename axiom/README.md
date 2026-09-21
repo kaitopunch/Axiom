@@ -59,12 +59,12 @@ dependencyResolutionManagement.repositories {
 }
 
 // build.gradle.kts của module
-implementation("com.github.kaitopunch.Axiom:axiom:1.0.0")
+implementation("com.github.kaitopunch:Axiom:1.0.0")
 ```
 
-Toạ độ do JitPack đặt theo repo GitHub (`com.github.<owner>.<repo>:<module>:<tag>`), không phải
-`com.axiom` như khi build local. Version = tên tag; danh sách tag và log build tại
-[jitpack.io/#kaitopunch/Axiom](https://jitpack.io/#kaitopunch/Axiom).
+Toạ độ do JitPack đặt theo repo GitHub (`com.github.<owner>:<repo>:<tag>` — repo chỉ có một artifact
+nên JitPack phát hành nó làm root artifact), không phải `com.axiom` như khi build local. Version = tên
+tag; danh sách tag và log build tại [jitpack.io/#kaitopunch/Axiom](https://jitpack.io/#kaitopunch/Axiom).
 
 Cần biết:
 
@@ -615,7 +615,7 @@ Cho project khác: bước 1, 2, 4, 5, 6 và đăng ký task vào `Axiom.init`.
 
 Kênh public là **JitPack** — không có bước upload: JitPack tự clone tag của `kaitopunch/Axiom`, chạy
 `install` trong `jitpack.yml` (`:axiom:publishToMavenLocal`, JDK 17) và phát hành lại kết quả dưới toạ
-độ `com.github.kaitopunch.Axiom:axiom:<tag>`. Group/version trong POM bị ghi đè theo tag, nên
+độ `com.github.kaitopunch:Axiom:<tag>`. Group/version trong POM bị ghi đè theo tag, nên
 **tag phải trùng `AXIOM_VERSION`** (`1.0.0`, không phải `v1.0.0`).
 
 ```bash
@@ -628,10 +628,10 @@ git tag 1.0.0 && git push origin main 1.0.0
 
 Build trên JitPack chạy **lần đầu có người resolve** (hoặc bấm *Get it* tại
 [jitpack.io/#kaitopunch/Axiom](https://jitpack.io/#kaitopunch/Axiom)); mất vài phút. Log:
-`https://jitpack.io/com/github/kaitopunch/Axiom/axiom/<tag>/build.log`. Build của một tag là bất
+`https://jitpack.io/com/github/kaitopunch/Axiom/<tag>/build.log`. Build của một tag là bất
 biến — tag hỏng thì sửa rồi tag version mới, hoặc đăng nhập JitPack bằng account chủ repo để xoá
 build. Trước khi tag, có thể build thử bằng commit SHA làm version
-(`com.github.kaitopunch.Axiom:axiom:<sha>`).
+(`com.github.kaitopunch:Axiom:<sha>`).
 
 Artifact: AAR + sources jar. Fallback GitHub Packages vẫn còn (`./gradlew :axiom:publish`, credential
 `gpr.user`/`gpr.key` có `write:packages` ở `~/.gradle/gradle.properties`) nhưng consumer phải có token

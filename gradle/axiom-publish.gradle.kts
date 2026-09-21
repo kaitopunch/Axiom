@@ -7,7 +7,7 @@
  * Coordinates come from the root `gradle.properties` (AXIOM_GROUP / AXIOM_VERSION / AXIOM_GITHUB_REPO).
  *
  * The public release channel is JitPack (root `jitpack.yml`): it runs `:axiom:publishToMavenLocal` on the
- * builder and republishes the result as `com.github.kaitopunch.Axiom:axiom:<tag>`, rewriting the POM's
+ * builder and republishes the result as `com.github.kaitopunch:Axiom:<tag>`, rewriting the POM's
  * group and version from the git tag. Nothing in this script is JitPack-specific — the `release`
  * publication is all it needs. The GitHubPackages repository below is a fallback for `:axiom:publish`;
  * its credentials come from `~/.gradle/gradle.properties` (`gpr.user`, `gpr.key`) or the environment
