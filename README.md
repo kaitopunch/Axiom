@@ -68,6 +68,6 @@ URL, probe 404 không transient).
 
 ## Chuyển sang artifact đã publish
 
-Bỏ `include(":axiom")` trong `settings.gradle.kts`, thêm repo GitHub Packages, và thay
-`implementation(project(":axiom"))` bằng `implementation("com.axiom:axiom:0.1.0")` — chi tiết
-[axiom/README.md §1](axiom/README.md#1-cài-đặt). Code app không đổi dòng nào.
+Bỏ `include(":axiom")` trong `settings.gradle.kts`, thêm repo `https://jitpack.io`, và thay
+`implementation(project(":axiom"))` bằng `implementation("com.github.kaitopunch.Axiom:axiom:1.0.0")` —
+chi tiết [axiom/README.md §1](axiom/README.md#1-cài-đặt). Code app không đổi dòng nào.

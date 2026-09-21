@@ -1,0 +1,12 @@
+# JitPack build config — https://jitpack.io/docs/BUILDING/
+#
+# JitPack checks out the requested tag/commit of kaitopunch/Axiom, runs `install`, then republishes what
+# landed in ~/.m2 as `com.github.kaitopunch.Axiom:axiom:<tag>` (group and version rewritten from git;
+# see the Axiom block in gradle.properties). Only :axiom is published — :app is the demo consumer.
+#
+# JDK 17 for the same reason README.md gives for local builds: Gradle 8.11.1 + AGP 8.9.1 break on newer
+# JDKs. compileSdk 36 is fetched by AGP's SDK auto-download on the builder if it is not preinstalled.
+jdk:
+  - openjdk17
+install:
+  - ./gradlew :axiom:publishToMavenLocal --no-daemon --stacktrace

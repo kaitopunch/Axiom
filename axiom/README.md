@@ -48,29 +48,23 @@ include(":axiom")
 implementation(project(":axiom"))
 ```
 
-**Từ GitHub Packages (project khác):**
+**Từ JitPack (project khác) — public, không cần token:**
 
 ```kotlin
 // settings.gradle.kts
 dependencyResolutionManagement.repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/duylt-dev/axiom")
-        credentials {
-            username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
-            password = providers.gradleProperty("gpr.key").orNull ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
+    google()
+    mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 // build.gradle.kts của module
-implementation("com.axiom:axiom:0.1.0")
+implementation("com.github.kaitopunch.Axiom:axiom:1.0.0")
 ```
 
-```properties
-# ~/.gradle/gradle.properties — KHÔNG commit
-gpr.user=<github-username>
-gpr.key=<token có scope read:packages>
-```
+Toạ độ do JitPack đặt theo repo GitHub (`com.github.<owner>.<repo>:<module>:<tag>`), không phải
+`com.axiom` như khi build local. Version = tên tag; danh sách tag và log build tại
+[jitpack.io/#kaitopunch/Axiom](https://jitpack.io/#kaitopunch/Axiom).
 
 Cần biết:
 
@@ -619,17 +613,29 @@ Cho project khác: bước 1, 2, 4, 5, 6 và đăng ký task vào `Axiom.init`.
 
 ## 8. Publish
 
-Toạ độ ở root `gradle.properties`: `AXIOM_GROUP=com.axiom`, `AXIOM_VERSION=0.1.0` (bump mỗi release),
-`AXIOM_GITHUB_REPO=duylt-dev/axiom`. Credential ở `~/.gradle/gradle.properties` (`gpr.user`,
-`gpr.key` — token có `write:packages`) hoặc env `GITHUB_ACTOR` / `GITHUB_TOKEN`.
+Kênh public là **JitPack** — không có bước upload: JitPack tự clone tag của `kaitopunch/Axiom`, chạy
+`install` trong `jitpack.yml` (`:axiom:publishToMavenLocal`, JDK 17) và phát hành lại kết quả dưới toạ
+độ `com.github.kaitopunch.Axiom:axiom:<tag>`. Group/version trong POM bị ghi đè theo tag, nên
+**tag phải trùng `AXIOM_VERSION`** (`1.0.0`, không phải `v1.0.0`).
 
 ```bash
 export JAVA_HOME=~/Library/Java/JavaVirtualMachines/ms-17.0.16/Contents/Home
-./gradlew :axiom:publishToMavenLocal   # thử consumer với ~/.m2 trước
-./gradlew :axiom:publish               # đẩy lên GitHub Packages
+./gradlew :axiom:testDebugUnitTest :axiom:publishToMavenLocal   # thử consumer với ~/.m2 trước
+
+# bump AXIOM_VERSION trong gradle.properties, commit, rồi:
+git tag 1.0.0 && git push origin main 1.0.0
 ```
 
-Artifact: `com.axiom:axiom:<version>` (AAR + sources jar).
+Build trên JitPack chạy **lần đầu có người resolve** (hoặc bấm *Get it* tại
+[jitpack.io/#kaitopunch/Axiom](https://jitpack.io/#kaitopunch/Axiom)); mất vài phút. Log:
+`https://jitpack.io/com/github/kaitopunch/Axiom/axiom/<tag>/build.log`. Build của một tag là bất
+biến — tag hỏng thì sửa rồi tag version mới, hoặc đăng nhập JitPack bằng account chủ repo để xoá
+build. Trước khi tag, có thể build thử bằng commit SHA làm version
+(`com.github.kaitopunch.Axiom:axiom:<sha>`).
+
+Artifact: AAR + sources jar. Fallback GitHub Packages vẫn còn (`./gradlew :axiom:publish`, credential
+`gpr.user`/`gpr.key` có `write:packages` ở `~/.gradle/gradle.properties`) nhưng consumer phải có token
+`read:packages` mới tải được.
 
 ---
 
