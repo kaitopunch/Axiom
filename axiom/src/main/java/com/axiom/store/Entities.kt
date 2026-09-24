@@ -1,8 +1,8 @@
 package com.axiom.store
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room3.ColumnInfo
+import androidx.room3.Entity
+import androidx.room3.PrimaryKey
 
 /**
  * One stored payload's header. The JSON itself is in [ChunkEntity] rows, because Android reads a row

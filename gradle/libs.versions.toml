@@ -19,7 +19,7 @@ gson = "2.14.0"
 # resolves to the higher version.
 okhttp-bom = "5.1.0"
 workManager = "2.12.0"
-room = "2.8.5"
+room = "3.0.3"
 paging = "3.5.1"
 koin = "4.2.2"
 junit = "4.13.2"
@@ -47,9 +47,9 @@ okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-
 okhttp3-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workManager" }
 androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "workManager" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room" }
+androidx-room-testing = { module = "androidx.room3:room3-testing", version.ref = "room" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 androidx-paging-testing = { module = "androidx.paging:paging-testing", version.ref = "paging" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }

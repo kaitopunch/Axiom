@@ -97,7 +97,7 @@ dependencies {
 
     implementation(libs.converter.gson)
     implementation(libs.okhttp3.logging.interceptor)
-    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)

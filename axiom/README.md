@@ -62,7 +62,7 @@ dependencyResolutionManagement.repositories {
 }
 
 // build.gradle.kts của module
-implementation("com.github.kaitopunch:Axiom:1.0.2")
+implementation("com.github.kaitopunch:Axiom:1.0.3")
 ```
 
 Toạ độ do JitPack đặt theo repo GitHub (`com.github.<owner>:<repo>:<tag>` — repo chỉ có một artifact
@@ -620,14 +620,14 @@ Cho project khác: bước 1, 2, 4, 5, 6 và đăng ký task vào `Axiom.init`.
 Kênh public là **JitPack** — không có bước upload: JitPack tự clone tag của `kaitopunch/Axiom`, chạy
 `install` trong `jitpack.yml` (`:axiom:publishToMavenLocal`, JDK 17) và phát hành lại kết quả dưới toạ
 độ `com.github.kaitopunch:Axiom:<tag>`. Group/version trong POM bị ghi đè theo tag, nên
-**tag phải trùng `AXIOM_VERSION`** (`1.0.2`, không phải `v1.0.2`).
+**tag phải trùng `AXIOM_VERSION`** (`1.0.3`, không phải `v1.0.3`).
 
 ```bash
 export JAVA_HOME=~/Library/Java/JavaVirtualMachines/ms-17.0.16/Contents/Home
 ./gradlew :axiom:testDebugUnitTest :axiom:publishToMavenLocal   # thử consumer với ~/.m2 trước
 
 # bump AXIOM_VERSION trong gradle.properties, commit, rồi:
-git tag 1.0.2 && git push origin main 1.0.2
+git tag 1.0.3 && git push origin main 1.0.3
 ```
 
 Build trên JitPack chạy **lần đầu có người resolve** (hoặc bấm *Get it* tại

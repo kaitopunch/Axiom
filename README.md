@@ -54,7 +54,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.kaitopunch:Axiom:1.0.2")
+    implementation("com.github.kaitopunch:Axiom:1.0.3")
 }
 ```
 
@@ -87,13 +87,13 @@ Cần biết:
 - **Yêu cầu với app dùng Axiom:** `minSdk ≥ 24`, `compileSdk ≥ 35`, AGP ≥ 8.6, Kotlin ≥ 2.2, `jvmTarget ≥ 11` — mức sàn do chính các dependency đặt
   (WorkManager 2.12: compileSdk 35 / AGP 8.6 / minSdk 24 / JVM 11; koin-core 4.2: Kotlin 2.2), Axiom không
   nâng thêm. AAR build với AGP 9.4.1 / Kotlin 2.4.20 (metadata ghi cho Kotlin 2.2).
-- **Version = tên tag** trên GitHub (`1.0.2`, không có `v`). Tag có sẵn và log build tại
+- **Version = tên tag** trên GitHub (`1.0.3`, không có `v`). Tag có sẵn và log build tại
   [jitpack.io/#kaitopunch/Axiom](https://jitpack.io/#kaitopunch/Axiom); lần đầu một version được
   resolve, JitPack build mất ~2 phút — Gradle sẽ chờ. Thử một commit chưa tag: dùng SHA làm version
   (`com.github.kaitopunch:Axiom:44bde71ff5`).
 - **R8:** Axiom keep class của nó (consumer rules trong AAR). Record class của **bạn** phải tự keep vì
   Gson đọc bằng reflection: `-keep class com.example.data.record.** { *; }` (xem `app/proguard-rules.pro`).
-- Sources jar có trên JitPack (`Axiom-1.0.2-sources.jar`); Android Studio tải qua *Download Sources*.
+- Sources jar có trên JitPack (`Axiom-1.0.3-sources.jar`); Android Studio tải qua *Download Sources*.
 
 Kiểm chứng: chính `app/` này build được với artifact JitPack thay cho module nguồn —
 `./gradlew :app:installDebug -PAXIOM_SOURCE=jitpack` (xem [cuối trang](#chuyển-sang-artifact-đã-publish)).
@@ -108,7 +108,7 @@ export JAVA_HOME=~/Library/Java/JavaVirtualMachines/ms-17.0.16/Contents/Home   #
 
 Toolchain: AGP 9.4.1 (built-in Kotlin) · Kotlin 2.4.20 · KSP 2.3.12 · Gradle 9.7.1. `:axiom` compileSdk 36 /
 minSdk 24 / JVM 11; `app/` compileSdk 37 / minSdk 28 / JVM 17. Compose BOM 2026.09.00, Koin 4.2.2,
-Retrofit 3.0, OkHttp 5.1.0, Room 2.8.5, WorkManager 2.12, Coil 3.6.
+Retrofit 3.0, OkHttp 5.1.0, Room 3.0.3 (`androidx.room3`), WorkManager 2.12, Coil 3.6.
 
 ## Ba màn hình = ba nhóm tính năng
 
