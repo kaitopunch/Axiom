@@ -1,29 +1,37 @@
 [versions]
-# Toolchain — identical to the repository the Axiom module was copied from, so `axiom/build.gradle.kts`
-# builds unchanged here. Gradle 8.11.1 (wrapper) needs JDK 17: JDK 24 breaks it.
-agp = "8.9.1"
-kotlin = "2.1.10"
-ksp = "2.1.10-1.0.29"
+# Toolchain. AGP 9 compiles Kotlin itself ("built-in Kotlin"), so no module applies
+# org.jetbrains.kotlin.android any more; the root build still declares that plugin (apply false) only to
+# put KGP `kotlin` on the classpath instead of the older one AGP bundles. Gradle 9.7.1 (wrapper) runs on JDK 17+.
+agp = "9.4.1"
+kotlin = "2.4.20"
+ksp = "2.3.12"
 
 # Axiom's own dependencies (aliases must match what axiom/build.gradle.kts references)
-coroutines = "1.9.0"
-retrofit = "2.11.0"
-gson = "2.11.0"
-okhttp-bom = "4.12.0"
-workManager = "2.10.0"
-room = "2.7.0"
-paging = "3.3.6"
-koin = "4.1.1"
+coroutines = "1.11.0"
+retrofit = "3.0.0"
+gson = "2.14.0"
+# Not 5.5 (latest). OkHttp is an `api` dependency of Axiom, so its floor reaches every consumer app:
+# - okhttp-android 5.4+ stamps minCompileSdk 36/37 into its AAR;
+# - logging-interceptor 5.2+ ships META-INF/versions/9/OSGI-INF/MANIFEST.MF, which collides with the one in
+#   jspecify (pulled in by Room/WorkManager) and fails mergeJavaResource on AGP < 9 unless the app adds a
+#   packaging exclude.
+# 5.1.0 is the newest with neither. An app that wants a newer OkHttp declares it itself and Gradle
+# resolves to the higher version.
+okhttp-bom = "5.1.0"
+workManager = "2.12.0"
+room = "2.8.5"
+paging = "3.5.1"
+koin = "4.2.2"
 junit = "4.13.2"
-robolectric = "4.14.1"
+robolectric = "4.17"
 
 # The demo app
-coreKtx = "1.15.0"
-activityCompose = "1.9.3"
-lifecycle = "2.8.7"
-composeBom = "2025.06.01"
-navigationCompose = "2.8.5"
-coil = "2.7.0"
+coreKtx = "1.19.1"
+activityCompose = "1.13.0"
+lifecycle = "2.11.0"
+composeBom = "2026.09.00"
+navigationCompose = "2.10.2"
+coil = "3.6.3"
 timber = "5.0.1"
 
 [libraries]
@@ -65,7 +73,8 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]

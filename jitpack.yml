@@ -4,8 +4,8 @@
 # landed in ~/.m2 as `com.github.kaitopunch:Axiom:<tag>` (group and version rewritten from git;
 # see the Axiom block in gradle.properties). Only :axiom is published — :app is the demo consumer.
 #
-# JDK 17 for the same reason README.md gives for local builds: Gradle 8.11.1 + AGP 8.9.1 break on newer
-# JDKs. compileSdk 36 is fetched by AGP's SDK auto-download on the builder if it is not preinstalled.
+# JDK 17: the floor for Gradle 9.7.1 + AGP 9.4.1 (README.md, "Chạy"). compileSdk 36 is fetched by AGP's
+# SDK auto-download on the builder if it is not preinstalled.
 jdk:
   - openjdk17
 install:

@@ -69,7 +69,7 @@ class ImageCache(
         return try {
             calls.newCall(Request.Builder().url(url).build()).execute().use { response ->
                 val body = response.body
-                if (!response.isSuccessful || body == null) {
+                if (!response.isSuccessful) {
                     Timber.w("Image %s → HTTP %d", url, response.code)
                     return null
                 }

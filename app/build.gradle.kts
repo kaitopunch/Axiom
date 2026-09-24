@@ -1,12 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.duylt.demo.axiom"
-    compileSdk = 36
+    // 37: core-ktx 1.19 requires it (its AAR metadata sets minCompileSdk 37).
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.duylt.demo.axiom"
@@ -32,9 +32,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         compose = true
         buildConfig = true
@@ -48,8 +45,14 @@ android {
         }
     }
     lint {
-        // lifecycle 2.8.7's detector crashes against AGP 8.9's lint (same as in the SDK's home repo).
+        // lifecycle's detector crashes against AGP's lint (same as in the SDK's home repo).
         disable += "NullSafeMutableLiveData"
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
@@ -92,6 +95,8 @@ dependencies {
     implementation(libs.koin.androidx.compose)
 
     implementation(libs.coil.compose)
+    // Coil 3 loads network URLs only through a network fetcher; this one reuses the OkHttp Axiom brings.
+    implementation(libs.coil.network.okhttp)
     implementation(libs.timber)
 
     testImplementation(libs.junit)
